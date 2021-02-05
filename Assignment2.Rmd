@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-Two questions to be graded by the TA: 
+Two questions to be graded by the TA: Question 1 and Question 2.
 
 
 
@@ -22,6 +22,7 @@ Wage=read.csv('Wage.csv');
 library(gplots)
 library(lme4)
 attach(Wage)
+??lme4
 ```
 
 ***
@@ -102,18 +103,18 @@ plotmeans(wage~ethnicity,data=Wage,xlab="Ethnicity",ylab="Wage", main="Main  eff
 interaction.plot(Wage$occup, Wage$ethnicity, Wage$wage, main="Interaction effect, Ethnicity and Occupation", xlab="Occupation",ylab="Wage", trace.label =  "Ethnicity", xtick = T)
 
 ```
-TODO:**Summarize your findings**
+As noted in Assignment 1, management and technical occupations appear to have the highest averages among occupations. While white employees have the highest calculated mean wage, the present confidence intervals make it unclear whether any one ethnicity can be declared as having a significantly higher wage than others. The interaction between both effects supports this uncertainty. Again, we see white employees have a higher wage average than other ethnicities across nearly all occupations, but it is inconclusive whether this is a significant difference. On first glance, I would think our model would indicate that there is a significant difference including interactions between ethnicity and occupation but not a significant difference in the main effect of ethnicity. 
 
 ***
 	
 (3) Fit the ANOVA model described in Part 1. Obtain the ANOVA table and state your conclusions. Are the findings here consistent with your initial assessments from Part 2?
 
 ```{r}
-anova.1 = aov(wage~factor(occupation)*factor(ethnicity), data = Wage )
+anova.1 = aov(wage~factor(occupation)+factor(ethnicity)+factor(occupation):factor(ethnicity), data = Wage )
 anova.1$coeff
 summary(anova.1)
 ```
-
+Yes, these findings are partially in alignment with my assessments in part two because I said there would not be a significant difference among the mean wages from ethnicity alone. I did assess that there would be a significant interaction between ethnicity and occupation but the mdoel indicates there is not. 
 ***
 
 (4) Carry out a test to decide if the  effect of ethnicity is present on the full data set, at the significance level $\alpha=0.01$. 
@@ -179,6 +180,14 @@ In this model, we have
 
 (6) Assuming that the model in Part 5 is appropriate, obtain an estimate of the proportion of variability that is due to variability in occupation.
 
+```{r}
+lm1=lmer(wage~as.factor(ethnicity)+(1|factor(occupation)),data=Wage)
+
+summary(lm1)
+#6.205  
+```
+
+
 	We can see that 
 $\mathbb{E}[{\rm MSAB}]- \mathbb{E}[{\rm MSE}]=n\sigma^2_{\alpha\beta},  \mathbb{E}[{\rm MSB}]-\mathbb{E}[{\rm MSAB}]=n a \sigma_{\beta}^2$. We can define unbiased estimators of the variance components based on the mean squares. 
 
@@ -189,7 +198,7 @@ $\hat{H}= \sum c_i \bar{Y}_{i\cdot \cdot}$, ${\rm var}(\hat{H}) = \sum c_i^2(n\s
 *** 
 
 ## Acknowledgement {-}
-- Stats
+- Stats 207 Class Notes
 
 ## Session information {-}
 ```{r}
