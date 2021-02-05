@@ -128,7 +128,7 @@ $$
 
 
 
-We have $F^*={\rm MSA}/{\rm MSE}$ that follows an F-distribution with $F(0.99, 2,526 )$. If $F^* > F(0.99, 2,526)$ then we rejuect the null hypothsis. 
+We have $F^*={\rm MSA}/{\rm MSE}$ that follows an F-distribution with $F(0.99, 2,516 )$. If $F^* > F(0.99, 2,516)$ then we rejuect the null hypothsis. 
 
 $F^*=$
 ```{r}
@@ -137,23 +137,46 @@ round(summary(anova.1)[[1]][2,4],digits=3)
 
 ```
 
-$F(0.01, 2,536 )$
+$F(0.01, 2,516 )$
 ```{r}
-qf(0.99, 2,526 )
+qf(0.99, 2,516 )
 
 ```
-$2.159\ngtr 2.159$ so $ F^* \ngtr F(0.99, 2,526)$ and therefore we do not reject the null hypothesis at significance level $\alpha=0.01$. 
+$2.159\ngtr 4.646516$ so $ F^* \ngtr F(0.99, 2,516)$ and therefore we do not reject the null hypothesis at significance level $\alpha=0.01$. 
 	
 ***	
 
 (5) For this part and the next, assume that the occupations have been selected randomly. Write down an appropriate ANOVA model that is additive in the factors and explain the terms in the model.
+	Mixed effects model.
 	
 	
+	
+	When fixed effects and random effects are both present, our model takes the same form but there are a few more assumptions 
+$$
+Y_{ijk} =  \mu_{\cdot\cdot} + \alpha_i+\beta_j + (\alpha\beta)_{ij}+\epsilon_{ijk}, \ k=1,\ldots, 534, j=1,\ldots, 3, i=1,\ldots, 6,
+$$
+where (i) $\sum \alpha_i =0$, (ii) $\beta_j$ are i.i.d. $N(0,\sigma_{\beta}^2)$, (iii) $\sum_i  (\alpha\beta)_{ij} =0$ for any $j$, 
+(iv) $ (\alpha\beta)_{ij} \sim N(0,(1-1/a)\sigma^2_{\alpha\beta}) $, (v) ${\rm cov}( (\alpha\beta)_{ij},  (\alpha\beta)_{i'j})= -\sigma^2_{\alpha\beta}/a$, (vi) ${\rm cov}( (\alpha\beta)_{ij},  (\alpha\beta)_{i'j'})=0$,  if $i\neq i'$ and $j\neq j'$, (vii)$\{\epsilon_{ijk}\}$ are i.i.d. $N(0,\sigma^2)$, and (viii)  $\{ \beta_j\}$, $\{(\alpha\beta)_{ij}\}$, $\{\epsilon_{ijk} \}$ are pairwise independent. 
+
+In this model, we have 
+1. $ \mathbb{E}[Y_{ijk}]=\mu_{\cdot\cdot}+\alpha_i$ 
+2. ${\rm var}(Y_{ijk})=\sigma_{\beta}^2+(1-1/a)\sigma_{\alpha\beta}^2+\sigma^2$. 
+3. ${\rm cov}(Y_{ijk},Y_{ijk'})=\sigma_{\beta}^2+(1-1/a)\sigma_{\alpha\beta}^2$ for $k\neq k'$. 
+4. ${\rm cov}(Y_{ijk},Y_{ij'k'})=0$ for $j\neq j'$.
+5. ${\rm cov}(Y_{ijk},Y_{i'jk'})=\sigma_{\beta}^2-1/a\sigma_{\alpha\beta}^2$ for $i\neq i'$.
+6. ${\rm cov}(Y_{ijk},Y_{i'j'k'})=0$ when no indices are equal.
+
 
 ***
 
 (6) Assuming that the model in Part 5 is appropriate, obtain an estimate of the proportion of variability that is due to variability in occupation.
+	We can see that 
+$\mathbb{E}[{\rm MSAB}]- \mathbb{E}[{\rm MSE}]=n\sigma^2_{\alpha\beta},  \mathbb{E}[{\rm MSB}]-\mathbb{E}[{\rm MSAB}]=n a \sigma_{\beta}^2$. We can define unbiased estimators of the variance components based on the mean squares. 
+
+We have 
+$\hat{H}= \sum c_i \bar{Y}_{i\cdot \cdot}$, ${\rm var}(\hat{H}) = \sum c_i^2(n\sigma_{\alpha\beta}^2+\sigma^2)/(nb)$, and $s^2(\hat{H})=\sum c_i^2 {\rm MSAB}/(nb)$. 
 	
+
 *** 
 
 ## Acknowledgement {-}
