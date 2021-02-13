@@ -22,7 +22,7 @@ Wage=read.csv('Wage.csv');
 library(gplots)
 library(lme4)
 attach(Wage)
-??lme4
+
 ```
 
 ***
