@@ -110,7 +110,7 @@ As noted in Assignment 1, management and technical occupations appear to have th
 (3) Fit the ANOVA model described in Part 1. Obtain the ANOVA table and state your conclusions. Are the findings here consistent with your initial assessments from Part 2?
 
 ```{r}
-anova.1 = aov(wage~factor(occupation)+factor(ethnicity)+factor(occupation):factor(ethnicity), data = Wage )
+anova.1 = aov(wage~as.factor(ethnicity)*as.factor(occupation), data = Wage )
 anova.1$coeff
 summary(anova.1)
 ```
@@ -120,7 +120,7 @@ Yes, these findings are partially in alignment with my assessments in part two b
 (4) Carry out a test to decide if the  effect of ethnicity is present on the full data set, at the significance level $\alpha=0.01$. 
 
 
-**Test for the main effect of factor A.** Consider the following null and alternative hypotheses. 
+**Test for the main effect of factor Ethnicity** Consider the following null and alternative hypotheses. 
 
 $$
 H_0: \beta_{i}=0 \ \ \forall i \ \ \  {\rm v.s.}\ \  \ H_a:\  {\rm not \ all \ } \beta_i \ {\rm are \ zero}.
@@ -163,17 +163,10 @@ But in this case
 
 - Since $\alpha$ is a random effect, our interaction is also random $ (\alpha\beta)_{ij} \sim N(0,(1-1/b)\sigma^2_{\alpha\beta}) $
 
-- (v) $ cov( (\alpha\beta)_{ij},  (\alpha\beta)_{ij'}) = \sigma^2_{ \alpha_i}$,
+- $ cov( (\alpha\beta)_{ij},  (\alpha\beta)_{ij'}) = \sigma^2_{ \alpha_i}$,
 
-${(\alpha\beta)_{ij}}$, ${\epsilon_{ijk} }$ are pairwise independent. 
+- ${(\alpha\beta)_{ij}}$, ${\epsilon_{ijk} }$ are pairwise independent. 
 
-In this model, we have 
-1. $ \mathbb{E}[Y_{ijk}]=\mu_{\cdot\cdot}+\alpha_i$ 
-2. ${\rm var}(Y_{ijk})=\sigma_{\beta}^2+(1-1/a)\sigma_{\alpha\beta}^2+\sigma^2$. 
-3. ${\rm cov}(Y_{ijk},Y_{ijk'})=\sigma_{\beta}^2+(1-1/a)\sigma_{\alpha\beta}^2$ for $k\neq k'$. 
-4. ${\rm cov}(Y_{ijk},Y_{ij'\alpha\beta}/a$, (vi) ${\rm cov}( (\alpha\beta)_{ij},  (\alpha\beta)_{i'j'})=0$,  if $i\neq i'$ and $j\neq j'$, (vii)$\{\epsilon_{ijk}\}$ are i.i.d. $N(0,\sigma^2)$, and (viii)  k'})=0$ for $j\neq j'$.
-5. ${\rm cov}(Y_{ijk},Y_{i'jk'})=\sigma_{\beta}^2-1/a\sigma_{\alpha\beta}^2$ for $i\neq i'$.
-6. ${\rm cov}(Y_{ijk},Y_{i'j'k'})=0$ when no indices are equal.
 
 
 ***
@@ -183,17 +176,22 @@ In this model, we have
 ```{r}
 lm1=lmer(wage~as.factor(ethnicity)+(1|factor(occupation)),data=Wage)
 
-summary(lm1)
-#6.205  
+sm=summary(lm1)
+#6.205 
+sm
+```
+
+Therefore the proportion of variance from occupation is: 
+var(occupation)/var(total)
+
+```{r}
+6.205/(6.205+21.760)
+
 ```
 
 
-	We can see that 
-$\mathbb{E}[{\rm MSAB}]- \mathbb{E}[{\rm MSE}]=n\sigma^2_{\alpha\beta},  \mathbb{E}[{\rm MSB}]-\mathbb{E}[{\rm MSAB}]=n a \sigma_{\beta}^2$. We can define unbiased estimators of the variance components based on the mean squares. 
 
-We have 
-$\hat{H}= \sum c_i \bar{Y}_{i\cdot \cdot}$, ${\rm var}(\hat{H}) = \sum c_i^2(n\sigma_{\alpha\beta}^2+\sigma^2)/(nb)$, and $s^2(\hat{H})=\sum c_i^2 {\rm MSAB}/(nb)$. 
-	
+
 
 *** 
 
